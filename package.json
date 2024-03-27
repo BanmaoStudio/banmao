@@ -1,0 +1,19 @@
+{
+  "name": "banmao-admin",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "packageManager": "pnpm",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1"
+  }
+}
