@@ -5,7 +5,14 @@
   "main": "index.js",
   "packageManager": "pnpm",
   "scripts": {
-    "preinstall": "npx only-allow pnpm"
+    "preinstall": "npx only-allow pnpm",
+    "build": "pnpm --filter=@banmao/* run build",
+    "clear": "rimraf 'packages/*/{node_modules}' && rimraf node_modules",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "publish": "changeset publish",
+    "release": "pnpm release:only",
+    "release:only": "changeset publish --registry=https://registry.npmjs.com/"
   },
   "private": true,
   "engines": {
