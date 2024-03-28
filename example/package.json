@@ -1,24 +1,21 @@
 {
-  "name": "@banmao/protable",
+  "name": "@banmao/example",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
-  "main": "index.ts",
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
-  "dependencies": {
-    "vuedraggable": "^4.1.0"
-  },
   "devDependencies": {
-    "@iconify/vue": "^4.1.1",
+    "@types/node": "^20.11.30",
     "@vitejs/plugin-vue": "^5.0.4",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "typescript": "^5.2.2",
     "unocss": "^0.58.7"
+  },
+  "dependencies": {
+    "@banmao/protable": "workspace:*"
   }
 }
