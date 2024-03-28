@@ -10,7 +10,6 @@
     "clear": "rimraf 'packages/*/{node_modules}' && rimraf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "publish": "changeset publish",
     "release": "pnpm release:only",
     "release:only": "changeset publish --registry=https://registry.npmjs.com/"
   },
