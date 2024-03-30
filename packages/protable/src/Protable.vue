@@ -32,7 +32,7 @@
                     <n-space justify="end">
                         <n-button @click="handleReset">重置</n-button>
                         <n-button type="primary" @click="handleSearch">查询</n-button>
-                        <n-button type="info" @click="gridCollapsed = !gridCollapsed">
+                        <n-button v-if="overflow" type="info" @click="gridCollapsed = !gridCollapsed">
                             {{ gridCollapsed ? '展开': '折叠' }}
                         </n-button>
                     </n-space>
@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, ref } from 'vue'
+    import { computed, ref, onMounted } from 'vue'
     import {
         DataTableColumns,
         NButtonGroup,
@@ -111,12 +111,12 @@
     const emit = defineEmits<ProtableEmits>()
 
     const tableColumns = computed(() => {
-        const res = columns.filter((column) => !column?.hideInTable)
-        return res as DataTableColumns<any>
+        const res = columns.filter((column: { hideInTable: any; }) => !column?.hideInTable)
+        return res as DataTableColumns
     })
 
     const searchFieldColumns = computed(() => {
-        return columns.filter((column) => !column?.hideInSearch)
+        return columns.filter((column: { hideInSearch: any; }) => !column?.hideInSearch)
     })
 
     type TableSize = 'small' | 'medium' | 'large' | undefined
@@ -132,11 +132,21 @@
     // 默认折叠后的行数
     const gridCollapsedRows = ref(1)
 
-    const searchFormData = ref({
-        // TODO 初始化搜索表单的值
-    })
+    const searchFormData = ref<{[key: string]: any;}>({})
 
-    // const createSearchFormData = () => ({})
+    const createSearchFormData = () => {
+        const formData = {} as any
+
+        searchFieldColumns.value.forEach((column: { key: string | number; }) => {
+            formData[column.key] = ''
+        })
+
+        return formData
+    }
+
+    onMounted(() => {
+        searchFormData.value = createSearchFormData()
+    })
 
     const loadData = (page: number) => {
         emit('loadData', page)
@@ -152,6 +162,8 @@
 
     const handleReset = () => {
         // TODO 充值表单
+        searchFormData.value = createSearchFormData()
+
         loadData(1)
     }
 

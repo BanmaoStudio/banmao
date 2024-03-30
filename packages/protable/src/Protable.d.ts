@@ -1,15 +1,26 @@
-import { DataTableColumn, PaginationProps } from "naive-ui";
+import { PaginationProps } from "naive-ui";
 
-export interface ProtableColumn<T> extends DataTableColumn<T> {
-    valueType?: 'select' | 'text' | 'date';
-    hideInSearch?: boolean;
-    hideInForm?: boolean;
-    hideInTable?: boolean;
+type ValueType = 'select' | 'text' | 'date' | 'dateTime' | 'time' | 'timeRange';
+
+declare module 'naive-ui' {
+    export interface DataTableColumns {
+        valueType?: ValueType | null;
+        hideInSearch?: boolean;
+        hideInForm?: boolean;
+        hideInTable?: boolean;
+    }
 }
+
+// export interface ProtableColumn extends DataTableColumn {
+//     valueType?: 'select' | 'text' | 'date';
+//     hideInSearch?: boolean;
+//     hideInForm?: boolean;
+//     hideInTable?: boolean;
+// }
 
 export interface ProtableInstance<T> {
     reload: () => void;
-    setColumns: (columns: ProtableColumn[]) => void;
+    setColumns: (columns: ProtableColumns<T>) => void;
     setSearch: (search: any) => void;
     setForm: (form: any) => void;
     setPagination: (pagination: any) => void;
@@ -36,7 +47,7 @@ export interface SearchConfig {
 }
 
 export interface ProtableProps {
-    columns: ProtableColumn<T>[];
+    columns: ProtableColumns<T>;
     pageTitle: string;
     loading?: boolean;
     dataSource?: any[];
