@@ -11,6 +11,7 @@ declare module 'naive-ui' {
     }
 }
 
+
 // export interface ProtableColumn extends DataTableColumn {
 //     valueType?: 'select' | 'text' | 'date';
 //     hideInSearch?: boolean;

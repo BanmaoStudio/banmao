@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.3-alpha.0
+
+### Patch Changes
+
+- fix: 修复 ts 类型
+
 ## 0.1.2
 
 ### Patch Changes
