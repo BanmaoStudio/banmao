@@ -3,7 +3,7 @@ import { PaginationProps } from "naive-ui";
 type ValueType = 'select' | 'text' | 'date' | 'dateTime' | 'time' | 'timeRange';
 
 declare module 'naive-ui' {
-    export interface DataTableColumns {
+    export interface DataTableColumn {
         valueType?: ValueType | null;
         hideInSearch?: boolean;
         hideInForm?: boolean;
