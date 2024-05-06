@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.6
+
+### Patch Changes
+
+- 1. 修复已知问题
+
 ## 0.0.5
 
 ### Patch Changes
