@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.7
+
+### Patch Changes
+
+- 修复 columnSetting Component 未定义组件名称
+
 ## 0.0.6
 
 ### Patch Changes
