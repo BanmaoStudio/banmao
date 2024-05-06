@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.5
+
+### Patch Changes
+
+- 修复 ProtableColumn 类型声明"
+
 ## 0.0.4
 
 ### Patch Changes
