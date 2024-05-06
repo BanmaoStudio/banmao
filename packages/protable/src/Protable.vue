@@ -154,7 +154,7 @@
 
     const searchFieldColumns = computed(() => {
         return columnSettingOptions.value.filter(
-            (column: { hideInSearch: any }) => !column?.hideInSearch
+            (column: any) => !column?.hideInSearch && column?.type !== 'selection' && column.key !== 'action'
         )
     })
 

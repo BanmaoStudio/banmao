@@ -15,6 +15,7 @@
     }
 
     const columns = ref<ProtableColumns<RowData>>([
+        { type: 'selection' },
         {
             title: 'Name',
             key: 'name',
@@ -70,6 +71,13 @@
             key: 'date',
             resizable: true,
         },
+        {
+            title: 'Action',
+            key: 'action',
+            width: 150,
+            resizable: true,
+            fixed: 'right',
+        }
     ])
 
     const pagination = ref({
