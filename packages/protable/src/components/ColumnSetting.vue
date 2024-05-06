@@ -36,6 +36,10 @@ import { NButton, NPopover, NCheckbox } from 'naive-ui'
 import { Icon } from '@iconify/vue'
 import { ProtableColumn } from '../Protable';
 
+defineOptions({
+    name: 'ColumnSetting'
+})
+
 interface Props {
     columns: Column[];
     secondary?: boolean;
