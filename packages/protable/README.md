@@ -5,12 +5,12 @@
 ## 安装
 
 ```bash
-npm install @portable-as/portable --save
+npm install @banmao/portable --save
 ```
 
 ## 快速上手
 
 ```js
-import { Portable } from '@portable-as/portable'
+import { Portable } from '@banmao/portable'
 
 ```
