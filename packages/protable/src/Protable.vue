@@ -39,7 +39,7 @@
                         :placeholder="`输入${item.title}`" />
                 </n-form-item-gi>
                 <n-gi suffix #="{ overflow }">
-                    <n-space justify="end">
+                    <n-space justify="end" :wrap="false">
                         <n-button @click="handleReset">
                             <template #icon>
                                 <Icon icon="ant-design:reload-outlined" />
@@ -164,7 +164,8 @@
             (column: any) =>
                 !column?.hideInSearch &&
                 column?.type !== 'selection' &&
-                (column.key !== 'action' || column.key !== 'actions')
+                column.key !== 'action' &&
+                column.key !== 'actions'
         )
     })
 
