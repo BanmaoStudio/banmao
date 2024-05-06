@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.8
+
+### Patch Changes
+
+- - fix(protableColumn): 兼容列的 key 值为 action 或 actions
+
 ## 0.0.7
 
 ### Patch Changes
