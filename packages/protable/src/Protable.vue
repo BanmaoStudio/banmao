@@ -21,10 +21,9 @@
                     <n-select
                         v-if="item.valueType === 'select'"
                         v-model:value="searchFormData[item.key]"
-                        :options="item.filterOptions" 
+                        :options="item.filterOptions"
                         :placeholder="`选择${item.title}`"
-                        clearable
-                    />
+                        clearable />
                     <n-date-picker
                         v-else-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
@@ -32,8 +31,7 @@
                         style="width: 100%"
                         :placeholder="`选择${item.title}`"
                         clearable
-                        value-format="yyyy-MM-dd"
-                    />
+                        value-format="yyyy-MM-dd" />
                     <n-input
                         v-else
                         v-model:value="searchFormData[item.key]"
@@ -53,7 +51,7 @@
                                 <Icon icon="ant-design:search-outlined" />
                             </template>
                             查询
-                        </n-button >
+                        </n-button>
                         <n-button
                             v-if="showSuffix"
                             @click="handleToggleCollapsed">
@@ -104,7 +102,7 @@
             @update:page-size="handlePageSizeChange"
             @update:checked-row-keys="handleCheck"
             :bordered="false"
-            :flex-height="flexHeight !== false"/>
+            :flex-height="flexHeight !== false" />
     </n-card>
 </template>
 
@@ -141,7 +139,7 @@
         pagination,
         showCreate,
     } = withDefaults(defineProps<ProtableProps>(), {
-        flexHeight: false
+        flexHeight: false,
     })
 
     const paginationData = getDefaultPagination(pagination as any)
@@ -163,7 +161,10 @@
 
     const searchFieldColumns = computed(() => {
         return columnSettingOptions.value.filter(
-            (column: any) => !column?.hideInSearch && column?.type !== 'selection' && column.key !== 'action'
+            (column: any) =>
+                !column?.hideInSearch &&
+                column?.type !== 'selection' &&
+                (column.key !== 'action' || column.key !== 'actions')
         )
     })
 
