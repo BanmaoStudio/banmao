@@ -2,7 +2,7 @@
     <n-popover placement="bottom" trigger="click">
         <template #trigger>
             <n-button size="small" type="warning" :secondary="secondary !== false">
-                <icon-ant-design-setting-outlined class="mr-4px text-16px" />
+                <Icon icon="ant-design:setting-outlined" class="mr-4px text-16px" />
                 表格列设置
             </n-button>
         </template>
@@ -10,15 +10,15 @@
             <vue-draggable v-model="list" item-key="key">
                 <template #item="{ element }">
                     <div v-if="element.type === 'selection'"
-                        class="flex-y-center h-36px px-12px hover:bg-primary_active"
+                        class="flex items-center h-36px px-12px hover:bg-primary_active"
                     >
-                        <icon-mdi-drag class="mr-8px text-20px cursor-move" />
+                        <Icon icon="mdi-drag" class="mr-8px text-20px cursor-move" />
                         <n-check-box v-model:checked="element.checked"> 多选框 </n-check-box>
                     </div>
                     <div v-else-if="element.key"
-                        class="flex-y-center h-36px px-12px hover:bg-primary_active"
+                        class="flex items-center h-36px px-12px hover:bg-primary_active"
                     >
-                        <icon-mdi-drag class="mr-8px text-20px cursor-move" />
+                        <Icon icon="mdi-drag" class="mr-8px text-20px cursor-move" />
                         <n-checkbox v-model:checked="element.checked">
                             {{ element.title }}
                         </n-checkbox>
@@ -30,20 +30,47 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, watch } from 'vue'
 import VueDraggable from 'vuedraggable'
 import { NButton, NPopover, NCheckbox } from 'naive-ui'
+import { Icon } from '@iconify/vue'
+import { ProtableColumn } from '../Protable';
 
 interface Props {
+    columns: Column[];
     secondary?: boolean;
 }
 
-const { secondary } = defineProps<Props>();
+type Column = ProtableColumn
 
-const columns = defineModel('columns', { required: true });
+const { secondary, columns } = defineProps<Props>();
 
-const list = computed(() => {
+interface Emits {
+    (event: 'update:columns', value: Column[]): void;
+}
+
+const emit = defineEmits<Emits>();
+
+type List = Column & { checked?: boolean }
+
+const list = ref(initList());
+
+function initList(): List[] {
     return columns.map((item) => ({ ...item, checked: true }))
+}
+
+watch(list, (newValue: List[]) => {
+    const newColumns = newValue.filter(item => item.checked)
+
+    const columns: Column[] = newColumns.map((item) => {
+        const column = { ...item };
+        delete column.checked;
+        return column;
+    }) as Column[];
+
+    emit("update:columns", columns);
+}, {
+    deep: true
 })
 
 </script>

@@ -1,23 +1,25 @@
-import { PaginationProps } from "naive-ui";
+import { PaginationProps, DataTableColumn } from "naive-ui";
 
 type ValueType = 'select' | 'text' | 'date' | 'dateTime' | 'time' | 'timeRange';
 
-declare module 'naive-ui' {
-    export interface DataTableColumn {
-        valueType?: ValueType | null;
-        hideInSearch?: boolean;
-        hideInForm?: boolean;
-        hideInTable?: boolean;
-    }
+// declare module 'naive-ui' {
+//     export interface DataTableColumn {
+//         valueType?: ValueType | null;
+//         hideInSearch?: boolean;
+//         hideInForm?: boolean;
+//         hideInTable?: boolean;
+//     }
+// }
+
+
+export interface ProtableColumn extends DataTableColumn {
+    valueType?: 'select' | 'text' | 'date';
+    hideInSearch?: boolean;
+    hideInForm?: boolean;
+    hideInTable?: boolean;
 }
 
-
-// export interface ProtableColumn extends DataTableColumn {
-//     valueType?: 'select' | 'text' | 'date';
-//     hideInSearch?: boolean;
-//     hideInForm?: boolean;
-//     hideInTable?: boolean;
-// }
+export type ProtableColumns<T> = Array<ProtableColumn<T>>;
 
 export interface ProtableInstance<T> {
     reload: () => void;

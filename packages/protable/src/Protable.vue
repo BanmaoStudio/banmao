@@ -1,13 +1,18 @@
 <template>
     <n-card>
-        <n-form label-placement="left" label-width="100">
+        <n-form
+            label-placement="left"
+            label-width="100"
+            :show-feedback="false"
+            :show-require-mark="false">
             <n-grid
                 item-responsive
                 :cols="3"
                 :x-gap="16"
+                :y-gap="16"
                 :collapsed="gridCollapsed"
                 :collapsed-rows="gridCollapsedRows"
-            >
+                ref="gridRef">
                 <n-form-item-gi
                     v-for="item in searchFieldColumns"
                     :key="item.key"
@@ -16,13 +21,11 @@
                     <n-select
                         v-if="item.valueType === 'select'"
                         v-model:value="searchFormData[item.key]"
-                        :options="item.filterOptions"
-                    />
+                        :options="item.filterOptions" />
                     <n-date-picker
                         v-else-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
-                        type="date"
-                    />
+                        type="date" />
                     <n-input
                         v-else
                         v-model:value="searchFormData[item.key]"
@@ -31,9 +34,14 @@
                 <n-gi suffix #="{ overflow }">
                     <n-space justify="end">
                         <n-button @click="handleReset">重置</n-button>
-                        <n-button type="primary" @click="handleSearch">查询</n-button>
-                        <n-button v-if="overflow" type="info" @click="gridCollapsed = !gridCollapsed">
-                            {{ gridCollapsed ? '展开': '折叠' }}
+                        <n-button type="primary" @click="handleSearch"
+                            >查询</n-button
+                        >
+                        <n-button
+                            v-if="showSuffix"
+                            type="info"
+                            @click="handleToggleCollapsed">
+                            {{ overflow ? '展开' : '折叠' }}
                         </n-button>
                     </n-space>
                 </n-gi>
@@ -42,7 +50,7 @@
     </n-card>
     <n-card class="flex-1 mt-12px shadow-sm">
         <template #header>
-            <n-skeleton v-if="loading" text width="40%" />
+            <slot v-if="$slots.tableHeader" name="table-header"></slot>
             <template v-else>{{ pageTitle }}</template>
         </template>
         <template #header-extra>
@@ -55,7 +63,9 @@
                         @click="() => loadData(1)"
                         :loading="loading" />
                     <density-button @update:select="handleSelectForTableSize" />
-                    <!-- <column-setting v-model:columns="columns" secondary /> -->
+                    <column-setting
+                        v-model:columns="columnSettingOptions"
+                        secondary />
                 </n-button-group>
             </n-space>
         </template>
@@ -63,7 +73,7 @@
             remote
             :columns="tableColumns"
             :data="dataSource"
-            :pagination="pagination"
+            :pagination="paginationData"
             :loading="loading"
             :row-key="rowKey"
             :scroll-x="1000"
@@ -76,13 +86,12 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, ref, onMounted } from 'vue'
+    import { computed, ref, onMounted, watchEffect } from 'vue'
     import {
         DataTableColumns,
         NButtonGroup,
         NCard,
         NSpace,
-        NSkeleton,
         NDataTable,
         NGrid,
         NGi,
@@ -90,11 +99,13 @@
         NFormItemGi,
         NInput,
         NSelect,
-        NButton
+        NButton,
     } from 'naive-ui'
     import { ProtableProps, ProtableEmits } from './Protable'
     import { CreateButton, RefreshButton, DensityButton } from './components'
-    // import ColumnSetting from './components/ColumnSetting.vue'
+    import ColumnSetting from './components/ColumnSetting.vue'
+    import { useShowSuffix } from './hooks/useShowSuffix'
+    import { getDefaultPagination } from './utils/pagination'
 
     // 定义props
     const {
@@ -107,16 +118,28 @@
         showCreate,
     } = defineProps<ProtableProps>()
 
+    const paginationData = getDefaultPagination(pagination as any)
+
     // 定义emits
     const emit = defineEmits<ProtableEmits>()
 
+    const columnSettingOptions = ref()
+
+    watchEffect(() => {
+        columnSettingOptions.value = columns
+    })
+
     const tableColumns = computed(() => {
-        const res = columns.filter((column: { hideInTable: any; }) => !column?.hideInTable)
+        const res = columnSettingOptions.value.filter(
+            (column: { hideInTable: any }) => !column?.hideInTable
+        )
         return res as DataTableColumns
     })
 
     const searchFieldColumns = computed(() => {
-        return columns.filter((column: { hideInSearch: any; }) => !column?.hideInSearch)
+        return columnSettingOptions.value.filter(
+            (column: { hideInSearch: any }) => !column?.hideInSearch
+        )
     })
 
     type TableSize = 'small' | 'medium' | 'large' | undefined
@@ -127,17 +150,24 @@
     }
 
     // const searchFormRef = ref<HTMLElement | null>(null)
+    const gridRef = ref<Element | null>(null)
+    // 显示隐藏的节点
+    const { showSuffix } = useShowSuffix(gridRef, 4)
     // 默认折叠
     const gridCollapsed = ref(true)
     // 默认折叠后的行数
     const gridCollapsedRows = ref(1)
+    // 切换折叠
+    const handleToggleCollapsed = () => {
+        gridCollapsed.value = !gridCollapsed.value
+    }
 
-    const searchFormData = ref<{[key: string]: any;}>({})
+    const searchFormData = ref<{ [key: string]: any }>({})
 
     const createSearchFormData = () => {
         const formData = {} as any
 
-        searchFieldColumns.value.forEach((column: { key: string | number; }) => {
+        searchFieldColumns.value.forEach((column: { key: string | number }) => {
             formData[column.key] = ''
         })
 

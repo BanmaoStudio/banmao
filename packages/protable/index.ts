@@ -2,8 +2,8 @@ import { App } from "vue";
 import Protable from "./src/Protable.vue";
 
 Protable.install = (app: App) => {
-    app.component(Protable.name, Protable);
+    app.component(Protable.name || 'Protable', Protable);
 }
 
 export default Protable;
-export type { ProtableProps, ProtableColumn } from './src/Protable';
+export type { ProtableProps, ProtableColumns } from './src/Protable';

@@ -49,6 +49,9 @@ importers:
         specifier: workspace:*
         version: link:../packages/protable
     devDependencies:
+      '@iconify/json':
+        specifier: ^2.2.206
+        version: 2.2.206
       '@types/node':
         specifier: ^20.11.30
         version: 20.11.30
@@ -906,6 +909,13 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+    dev: true
+
+  /@iconify/json@2.2.206:
+    resolution: {integrity: sha512-Vbi8BTvbEKZtCQDJDqMRDZenU8HYMHFtMkEx92pvyQN/Il5OfGwCNaR+bf9Sv2TkotnoiyqqickeWpdo0hllGQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+      pathe: 1.1.2
     dev: true
 
   /@iconify/types@2.0.0:

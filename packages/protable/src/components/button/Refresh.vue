@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue'
     import { NTooltip, NButton } from 'naive-ui'
     import { Icon } from '@iconify/vue'
 
