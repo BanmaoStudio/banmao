@@ -50,7 +50,16 @@
                 }
             },
         },
-        { title: 'Age', key: 'age', hideInSearch: true, resizable: true },
+        {
+            title: 'Age',
+            key: 'age',
+            sortOrder: false,
+            sorter(a: RowData, b: RowData) {
+                return a.age - b.age
+            },
+            hideInSearch: true,
+            resizable: true,
+        },
         {
             title: 'Address',
             key: 'address',
@@ -115,7 +124,7 @@
         @loadData="loadData"
         :showCreate="false"
         flex-height>
-        </Protable>
+    </Protable>
 </template>
 
 <style scoped>

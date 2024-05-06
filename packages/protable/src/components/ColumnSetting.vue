@@ -41,7 +41,7 @@ interface Props {
     secondary?: boolean;
 }
 
-type Column = ProtableColumn
+type Column = ProtableColumn<any>
 
 const { secondary, columns } = defineProps<Props>();
 

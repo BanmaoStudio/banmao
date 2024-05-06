@@ -1,4 +1,4 @@
-import { PaginationProps, DataTableColumn } from "naive-ui";
+import { PaginationProps, TableColumn } from "naive-ui";
 
 type ValueType = 'select' | 'text' | 'date' | 'dateTime' | 'time' | 'timeRange';
 
@@ -12,12 +12,12 @@ type ValueType = 'select' | 'text' | 'date' | 'dateTime' | 'time' | 'timeRange';
 // }
 
 
-export interface ProtableColumn<T> extends DataTableColumn<T> {
-    valueType?: 'select' | 'text' | 'date';
+export type ProtableColumn<T> = {
+    valueType?: ValueType;
     hideInSearch?: boolean;
     hideInForm?: boolean;
     hideInTable?: boolean;
-}
+} & TableColumn<T>;
 
 export type ProtableColumns<T> = Array<ProtableColumn<T>>;
 
