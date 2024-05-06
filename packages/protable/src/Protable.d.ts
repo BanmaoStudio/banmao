@@ -53,12 +53,13 @@ export interface ProtableProps {
     columns: ProtableColumns<T>;
     pageTitle: string;
     loading?: boolean;
-    dataSource?: any[];
+    dataSource?: T[];
     pagination?: false | PaginationProps;
     searchConfig?: SearchConfig;
     rowKey: any;
     createButtonText?: string;
-    showCreate: boolean;
+    showCreate?: boolean;
+    flexHeight?: boolean;
 }
 
 export interface ProtableEmits {
@@ -67,4 +68,5 @@ export interface ProtableEmits {
     (e: 'update:pageSize', pageSize: number): void
     (e: 'update:page', page: number): void
     (e: 'update:checked', keys: Array<string | number>, rows: object[], meta: { row: object | undefined, actions: 'check' | 'uncheck' | 'checkAll' | 'uncheckAll' }): void
+    (e: 'update:sorter', sorter: any): void
 }

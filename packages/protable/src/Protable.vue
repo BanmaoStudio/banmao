@@ -23,14 +23,21 @@
                         v-model:value="searchFormData[item.key]"
                         :options="item.filterOptions" 
                         :placeholder="`选择${item.title}`"
+                        clearable
                     />
                     <n-date-picker
                         v-else-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
-                        type="date" />
+                        type="date"
+                        style="width: 100%"
+                        :placeholder="`选择${item.title}`"
+                        clearable
+                        value-format="yyyy-MM-dd"
+                    />
                     <n-input
                         v-else
                         v-model:value="searchFormData[item.key]"
+                        clearable
                         :placeholder="`输入${item.title}`" />
                 </n-form-item-gi>
                 <n-gi suffix #="{ overflow }">
@@ -63,7 +70,7 @@
             </n-grid>
         </n-form>
     </n-card>
-    <n-card class="flex-1 mt-12px shadow-sm">
+    <n-card class="flex-auto mt-12px shadow-sm">
         <template #header>
             <slot v-if="$slots.tableHeader" name="table-header"></slot>
             <template v-else>{{ pageTitle }}</template>
@@ -96,14 +103,14 @@
             @update:page="handlePageChange"
             @update:page-size="handlePageSizeChange"
             @update:checked-row-keys="handleCheck"
-            :bordered="false" />
+            :bordered="false"
+            :flex-height="flexHeight !== false"/>
     </n-card>
 </template>
 
 <script setup lang="ts">
     import { computed, ref, onMounted, watchEffect, shallowRef } from 'vue'
     import {
-        DataTableColumns,
         NButtonGroup,
         NCard,
         NSpace,
@@ -114,9 +121,10 @@
         NFormItemGi,
         NInput,
         NSelect,
+        NDatePicker,
         NButton,
     } from 'naive-ui'
-    import { ProtableProps, ProtableEmits } from './Protable'
+    import { ProtableProps, ProtableEmits, ProtableColumn } from './Protable'
     import { CreateButton, RefreshButton, DensityButton } from './components'
     import ColumnSetting from './components/ColumnSetting.vue'
     import { useShowSuffix } from './hooks/useShowSuffix'
@@ -132,7 +140,9 @@
         rowKey,
         pagination,
         showCreate,
-    } = defineProps<ProtableProps>()
+    } = withDefaults(defineProps<ProtableProps>(), {
+        flexHeight: false
+    })
 
     const paginationData = getDefaultPagination(pagination as any)
 
@@ -146,10 +156,9 @@
     })
 
     const tableColumns = computed(() => {
-        const res = columnSettingOptions.value.filter(
-            (column: { hideInTable: any }) => !column?.hideInTable
+        return columnSettingOptions.value.filter(
+            (column: ProtableColumn<any>) => !column?.hideInTable
         )
-        return res as DataTableColumns
     })
 
     const searchFieldColumns = computed(() => {
@@ -188,6 +197,8 @@
 
         searchFieldColumns.value.forEach((column: any) => {
             if (column.valueType === 'select') {
+                formData[column.key] = null
+            } else if (column.valueType === 'date') {
                 formData[column.key] = null
             } else {
                 formData[column.key] = ''

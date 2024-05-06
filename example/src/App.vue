@@ -11,6 +11,8 @@
         name: string
         age: number
         gender: string
+        date: string,
+        address: string,
         id: number
     }
 
@@ -54,7 +56,7 @@
         {
             title: 'Age',
             key: 'age',
-            sortOrder: false,
+            sortOrder: 'descend',
             sorter(a: RowData, b: RowData) {
                 return a.age - b.age
             },
@@ -64,11 +66,13 @@
         {
             title: 'Address',
             key: 'address',
+            hideInSearch: true,
             resizable: true,
         },
         {
             title: 'Date',
             key: 'date',
+            valueType: 'date',
             resizable: true,
         },
         {
@@ -89,9 +93,10 @@
         showQuickJumper: true,
     }) as Ref<PaginationProps>
 
-    const dataSource = ref([
-        { name: 'One', age: 10, gender: 'male' },
-        { name: 'Two', age: 20, gender: 'female' },
+    const dataSource = ref<RowData[]>([
+        { id: 1, name: 'One', age: 10, gender: 'male', date: '2023-01-01', address: 'Address 1' },
+        { id: 2, name: 'Two', age: 20, gender: 'female', date: '2023-01-02', address: 'Address 2' },
+        { id: 3, name: 'Three', age: 30, gender: 'female', date: '2023-01-03', address: 'Address 3' },
     ])
 
     const rowKey = (row: any) => row.id
@@ -108,6 +113,23 @@
     onMounted(() => {
         loadData()
     })
+
+    const handleCreate = () => {
+        console.log('%cexample/src/App.vue:106 handleCreate', 'color: #007acc;')
+    }
+
+    const handleSorterChange = (sorter: any) => {
+        console.log('%cexample/src/App.vue:118 sorter', 'color: #007acc;', sorter);
+        // columns.value.forEach((column) => {
+        //     if (column.sortOrder === undefined) return
+        //     if (!sorter) {
+        //         column.sortOrder = false
+        //         return
+        //     }
+        //     if (column.key === sorter.columnKey) column.sortOrder = sorter.order
+        //     else column.sortOrder = false
+        // })
+    }
 </script>
 
 <template>
@@ -123,15 +145,16 @@
     <Protable
         pageTitle="Table"
         :rowKey="rowKey"
-        :data-source="dataSource"
+        :dataSource="dataSource"
         :columns="columns"
         :loading="loading"
         :pagination="pagination"
         @update:pageSize="(e) => (pagination.pageSize = e)"
         @update:page="(e) => (pagination.page = e)"
+        @update:sorter="handleSorterChange"
         @loadData="loadData"
-        :showCreate="false"
-        flex-height>
+        @create="handleCreate"
+    >
     </Protable>
 </template>
 
