@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.3
+
+### Patch Changes
+
+- 修复菜单折叠问题,修复动态列不可用等问题
+
 ## 0.0.3-alpha.0
 
 ### Patch Changes

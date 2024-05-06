@@ -29,14 +29,15 @@
             valueType: 'select',
             key: 'gender',
             resizable: true,
-            sorter: (row1: any, row2: any) => row1.gender - row2.gender,
+            sorter: 'default',
             filterOptions: [
                 { label: '男', value: 'male' },
                 { label: '女', value: 'female' },
                 { label: '未知', value: 'unknown' },
             ],
-            filter(value: string, row: any) {
-                return ~row.gender.indexOf(value)
+            filter(value: string, row: RowData) {
+                console.log('%cexample/src/App.vue:39 value', 'color: #007acc;', value);
+                return row.gender === value
             },
             render(row: RowData) {
                 switch (row.gender) {

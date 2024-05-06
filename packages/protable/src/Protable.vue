@@ -7,7 +7,7 @@
             :show-require-mark="false">
             <n-grid
                 item-responsive
-                :cols="3"
+                :cols="gridCols"
                 :x-gap="16"
                 :y-gap="16"
                 :collapsed="gridCollapsed"
@@ -21,7 +21,9 @@
                     <n-select
                         v-if="item.valueType === 'select'"
                         v-model:value="searchFormData[item.key]"
-                        :options="item.filterOptions" />
+                        :options="item.filterOptions" 
+                        :placeholder="`选择${item.title}`"
+                    />
                     <n-date-picker
                         v-else-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
@@ -29,18 +31,31 @@
                     <n-input
                         v-else
                         v-model:value="searchFormData[item.key]"
-                        :placeholder="`Input ${item.key}`" />
+                        :placeholder="`输入${item.title}`" />
                 </n-form-item-gi>
                 <n-gi suffix #="{ overflow }">
                     <n-space justify="end">
-                        <n-button @click="handleReset">重置</n-button>
-                        <n-button type="primary" @click="handleSearch"
-                            >查询</n-button
-                        >
+                        <n-button @click="handleReset">
+                            <template #icon>
+                                <Icon icon="ant-design:reload-outlined" />
+                            </template>
+                            重置
+                        </n-button>
+                        <n-button type="primary" @click="handleSearch">
+                            <template #icon>
+                                <Icon icon="ant-design:search-outlined" />
+                            </template>
+                            查询
+                        </n-button >
                         <n-button
                             v-if="showSuffix"
-                            type="info"
                             @click="handleToggleCollapsed">
+                            <template #icon>
+                                <Icon
+                                    :icon="`mdi:chevron-${
+                                        overflow ? 'down' : 'up'
+                                    }`" />
+                            </template>
                             {{ overflow ? '展开' : '折叠' }}
                         </n-button>
                     </n-space>
@@ -86,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-    import { computed, ref, onMounted, watchEffect } from 'vue'
+    import { computed, ref, onMounted, watchEffect, shallowRef } from 'vue'
     import {
         DataTableColumns,
         NButtonGroup,
@@ -106,6 +121,7 @@
     import ColumnSetting from './components/ColumnSetting.vue'
     import { useShowSuffix } from './hooks/useShowSuffix'
     import { getDefaultPagination } from './utils/pagination'
+    import { Icon } from '@iconify/vue'
 
     // 定义props
     const {
@@ -150,9 +166,12 @@
     }
 
     // const searchFormRef = ref<HTMLElement | null>(null)
-    const gridRef = ref<Element | null>(null)
+    const gridRef = shallowRef()
+    // 搜索栏显示列数
+    const gridCols = ref(3)
     // 显示隐藏的节点
-    const { showSuffix } = useShowSuffix(gridRef, 4)
+    const { showSuffix } = useShowSuffix(gridRef, gridCols.value)
+
     // 默认折叠
     const gridCollapsed = ref(true)
     // 默认折叠后的行数
@@ -167,8 +186,12 @@
     const createSearchFormData = () => {
         const formData = {} as any
 
-        searchFieldColumns.value.forEach((column: { key: string | number }) => {
-            formData[column.key] = ''
+        searchFieldColumns.value.forEach((column: any) => {
+            if (column.valueType === 'select') {
+                formData[column.key] = null
+            } else {
+                formData[column.key] = ''
+            }
         })
 
         return formData

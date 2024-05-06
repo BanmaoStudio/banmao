@@ -12,7 +12,7 @@ type ValueType = 'select' | 'text' | 'date' | 'dateTime' | 'time' | 'timeRange';
 // }
 
 
-export interface ProtableColumn extends DataTableColumn {
+export interface ProtableColumn<T> extends DataTableColumn<T> {
     valueType?: 'select' | 'text' | 'date';
     hideInSearch?: boolean;
     hideInForm?: boolean;
