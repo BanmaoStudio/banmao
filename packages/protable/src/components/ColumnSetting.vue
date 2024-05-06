@@ -13,7 +13,7 @@
                         class="flex items-center h-36px px-12px hover:bg-primary_active"
                     >
                         <Icon icon="mdi-drag" class="mr-8px text-20px cursor-move" />
-                        <n-check-box v-model:checked="element.checked"> 多选框 </n-check-box>
+                        <n-checkbox v-model:checked="element.checked"> 多选框 </n-checkbox>
                     </div>
                     <div v-else-if="element.key"
                         class="flex items-center h-36px px-12px hover:bg-primary_active"
