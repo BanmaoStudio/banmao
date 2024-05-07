@@ -1,0 +1,20 @@
+{
+    "name": "@banmao/hooks",
+    "version": "0.0.0",
+    "description": "自定义hooks",
+    "type": "module",
+    "main": "index.ts",
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsc"
+    },
+    "dependencies": {
+        
+    },
+    "devDependencies": {
+
+    },
+    "license": "MIT"
+}
