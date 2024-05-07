@@ -1,115 +1,111 @@
 <template>
-    <n-card>
-        <n-form
-            label-placement="left"
-            label-width="100"
-            :show-feedback="false"
-            :show-require-mark="false">
-            <n-grid
-                item-responsive
-                :cols="gridCols"
-                :x-gap="16"
-                :y-gap="16"
-                :collapsed="gridCollapsed"
-                :collapsed-rows="gridCollapsedRows"
-                ref="gridRef">
-                <n-form-item-gi
-                    v-for="item in searchFieldColumns"
-                    :key="item.key"
-                    :label="item.title"
-                    :path="item.key">
-                    <n-select
-                        v-if="item.valueType === 'select'"
-                        v-model:value="searchFormData[item.key]"
-                        :options="item.filterOptions"
-                        :placeholder="`选择${item.title}`"
-                        clearable />
-                    <n-date-picker
-                        v-else-if="item.valueType === 'date'"
-                        v-model:value="searchFormData[item.key]"
-                        type="date"
-                        style="width: 100%"
-                        :placeholder="`选择${item.title}`"
-                        clearable
-                        value-format="yyyy-MM-dd" />
-                    <n-input
-                        v-else
-                        v-model:value="searchFormData[item.key]"
-                        clearable
-                        :placeholder="`输入${item.title}`" />
-                </n-form-item-gi>
-                <n-gi suffix #="{ overflow }">
-                    <n-space justify="end" :wrap="false">
-                        <n-button @click="handleReset">
-                            <template #icon>
-                                <Icon icon="ant-design:reload-outlined" />
-                            </template>
-                            重置
-                        </n-button>
-                        <n-button type="primary" @click="handleSearch">
-                            <template #icon>
-                                <Icon icon="ant-design:search-outlined" />
-                            </template>
-                            查询
-                        </n-button>
-                        <n-button
-                            v-if="showSuffix"
-                            @click="handleToggleCollapsed">
-                            <template #icon>
-                                <Icon
-                                    :icon="`mdi:chevron-${
-                                        overflow ? 'down' : 'up'
-                                    }`" />
-                            </template>
-                            {{ overflow ? '展开' : '折叠' }}
-                        </n-button>
-                    </n-space>
-                </n-gi>
-            </n-grid>
-        </n-form>
-    </n-card>
-    <n-card class="flex-auto mt-12px shadow-sm">
-        <template #header>
-            <slot v-if="$slots.tableHeader" name="tableHeader"></slot>
-            <template v-else>{{ pageTitle }}</template>
-        </template>
-        <template #header-extra>
-            <n-space>
-                <slot name="tableHeaderExtra"></slot>
-                <create-button
-                    v-if="showCreate !== false"
-                    @click="handleCreate" />
-                <n-button-group>
-                    <refresh-button
-                        @click="() => loadData(1)"
-                        :loading="loading" />
-                    <density-button @update:select="handleSelectForTableSize" />
-                    <column-setting-component
-                        v-if="columnSetting === false"
-                        v-model:columns="columnData"
-                        secondary />
-                </n-button-group>
-            </n-space>
-        </template>
-        <n-data-table
-            v-bind="$attrs"
-            :loading
-            :columns="columnData"
-            :data="dataSource"
-            :pagination
-            :size
-        />
-    </n-card>
+    <div>
+        <n-card>
+            <n-form
+                label-placement="left"
+                label-width="100"
+                :show-feedback="false"
+                :show-require-mark="false">
+                <n-grid
+                    item-responsive
+                    :cols="gridCols"
+                    :x-gap="16"
+                    :y-gap="16"
+                    :collapsed="gridCollapsed"
+                    :collapsed-rows="gridCollapsedRows"
+                    ref="gridRef">
+                    <n-form-item-gi
+                        v-for="item in searchFieldColumns"
+                        :key="item.key"
+                        :label="item.title"
+                        :path="item.key">
+                        <n-select
+                            v-if="item.valueType === 'select'"
+                            v-model:value="searchFormData[item.key]"
+                            :options="item.filterOptions"
+                            :placeholder="`选择${item.title}`"
+                            clearable />
+                        <n-date-picker
+                            v-else-if="item.valueType === 'date'"
+                            v-model:value="searchFormData[item.key]"
+                            type="date"
+                            style="width: 100%"
+                            :placeholder="`选择${item.title}`"
+                            clearable
+                            value-format="yyyy-MM-dd" />
+                        <n-input
+                            v-else
+                            v-model:value="searchFormData[item.key]"
+                            clearable
+                            :placeholder="`输入${item.title}`" />
+                    </n-form-item-gi>
+                    <n-gi suffix #="{ overflow }">
+                        <n-space justify="end" :wrap="false">
+                            <n-button @click="handleReset">
+                                <template #icon>
+                                    <Icon icon="ant-design:reload-outlined" />
+                                </template>
+                                重置
+                            </n-button>
+                            <n-button type="primary" @click="handleSearch">
+                                <template #icon>
+                                    <Icon icon="ant-design:search-outlined" />
+                                </template>
+                                查询
+                            </n-button>
+                            <n-button
+                                v-if="showSuffix"
+                                @click="handleToggleCollapsed">
+                                <template #icon>
+                                    <Icon
+                                        :icon="`mdi:chevron-${
+                                            overflow ? 'down' : 'up'
+                                        }`" />
+                                </template>
+                                {{ overflow ? '展开' : '折叠' }}
+                            </n-button>
+                        </n-space>
+                    </n-gi>
+                </n-grid>
+            </n-form>
+        </n-card>
+        <n-card class="flex-auto mt-12px shadow-sm">
+            <template #header>
+                <slot v-if="$slots.tableHeader" name="tableHeader"></slot>
+                <template v-else>{{ pageTitle }}</template>
+            </template>
+            <template #header-extra>
+                <n-space>
+                    <slot name="tableHeaderExtra"></slot>
+                    <create-button
+                        v-if="showCreate !== false"
+                        @click="handleCreate" />
+                    <n-button-group>
+                        <refresh-button
+                            @click="() => loadData(1)"
+                            :loading="loading" />
+                        <density-button
+                            @update:select="handleSelectForTableSize" />
+                        <column-setting-component
+                            v-if="columnSetting === false"
+                            v-model:columns="columnData"
+                            secondary />
+                    </n-button-group>
+                </n-space>
+            </template>
+            <n-data-table
+                v-bind="$attrs"
+                :loading
+                :columns="columnData"
+                :data="dataSource"
+                :pagination
+                :size />
+        </n-card>
+    </div>
 </template>
 
 <script setup lang="ts">
-    import {
-        computed,
-        ref,
-        onMounted,
-        watchEffect,
-        shallowRef
-    } from 'vue'
+    import { computed, ref, onMounted, watchEffect, shallowRef } from 'vue'
     import {
         NButtonGroup,
         NCard,
@@ -229,7 +225,6 @@
 
         loadData(1)
     }
-
 </script>
 
 <style scoped></style>
