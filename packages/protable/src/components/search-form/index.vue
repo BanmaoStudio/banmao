@@ -38,7 +38,7 @@
                         clearable
                         :placeholder="`输入${item.title}`" />
                 </n-form-item-gi>
-                <n-gi suffix #="{ overflow }">
+                <n-gi suffix>
                     <n-space justify="end" :wrap="false">
                         <n-button @click="handleReset">
                             <template #icon>
@@ -58,10 +58,10 @@
                             <template #icon>
                                 <Icon
                                     :icon="`mdi:chevron-${
-                                        overflow ? 'down' : 'up'
+                                        gridCollapsed ? 'down' : 'up'
                                     }`" />
                             </template>
-                            {{ overflow ? '展开' : '折叠' }}
+                            {{ gridCollapsed ? '展开' : '折叠' }}
                         </n-button>
                     </n-space>
                 </n-gi>

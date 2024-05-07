@@ -5,7 +5,8 @@
 ## 安装
 
 ```bash
-npm install @banmao/portable --save
+
+npm install naive-ui @banmao/portable --save
 ```
 
 ## 快速上手
@@ -30,13 +31,12 @@ npm install @banmao/portable --save
 
 <script lang="tsx" setup>
 
-import { Portable } from '@banmao/portable'
+import Portable from '@banmao/portable'
 
 interface RowData {
     name: string
     id: number
 }
-
 
 const columns = ref<ProtableColumns<RowData>>([
     {

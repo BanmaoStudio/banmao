@@ -6,7 +6,7 @@ export function useShowSuffix(domRef: any, num: number) {
     onMounted(() => {
         nextTick(() => {
             const len = domRef.value.contentEl.children.length || 0
-            if (len >= num) {
+            if (len > num) {
                 showSuffix.value = true
             } else {
                 showSuffix.value = false

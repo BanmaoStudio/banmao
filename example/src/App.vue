@@ -91,7 +91,6 @@
             key: 'age',
             width: 100,
             sorter: (a: RowData, b: RowData) => a.age - b.age,
-            hideInSearch: true,
             resizable: true,
         },
         {
