@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.9
+
+### Patch Changes
+
+- 支持 data-table 组件全部属性,优化表格列设置与 columns 中 hideInTable 状态保持一致.\
+
 ## 0.0.8
 
 ### Patch Changes
