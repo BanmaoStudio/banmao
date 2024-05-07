@@ -26,10 +26,9 @@
         loading?: boolean
     }>()
 
-    const emits = defineEmits<RefreshButtonEmits>()
+    const emit = defineEmits<RefreshButtonEmits>()
 
     const handleClick = () => {
-        console.log('%cpackages/protable/src/components/button/Refresh.vue:33 loading', 'color: #007acc;', loading);
-        emits('click')
+        emit('click')
     }
 </script>

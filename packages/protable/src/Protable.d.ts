@@ -52,21 +52,21 @@ export interface SearchConfig {
 export interface ProtableProps {
     columns: ProtableColumns<T>;
     pageTitle: string;
-    loading?: boolean;
+    loading: boolean;
     dataSource?: T[];
     pagination?: false | PaginationProps;
     searchConfig?: SearchConfig;
-    rowKey: any;
     createButtonText?: string;
     showCreate?: boolean;
-    flexHeight?: boolean;
+    /** 显示表格列自定义设置，默认隐藏 */
+    columnSetting?: boolean;
 }
 
 export interface ProtableEmits {
     (e: 'loadData', page: number): void
     (e: 'create'): void
-    (e: 'update:pageSize', pageSize: number): void
-    (e: 'update:page', page: number): void
-    (e: 'update:checked', keys: Array<string | number>, rows: object[], meta: { row: object | undefined, actions: 'check' | 'uncheck' | 'checkAll' | 'uncheckAll' }): void
-    (e: 'update:sorter', sorter: any): void
+    // (e: 'update:pageSize', pageSize: number): void
+    // (e: 'update:page', page: number): void
+    // (e: 'update:checked', keys: Array<string | number>, rows: object[], meta: { row: object | undefined, actions: 'check' | 'uncheck' | 'checkAll' | 'uncheckAll' }): void
+    // (e: 'update:sorter', sorter: any): void
 }

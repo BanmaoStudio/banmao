@@ -13,13 +13,13 @@
                         class="flex items-center h-36px px-12px hover:bg-primary_active"
                     >
                         <Icon icon="mdi-drag" class="mr-8px text-20px cursor-move" />
-                        <n-checkbox v-model:checked="element.checked"> 多选框 </n-checkbox>
+                        <n-checkbox v-model:checked="element.hideInTable"> 多选框 </n-checkbox>
                     </div>
                     <div v-else-if="element.key"
                         class="flex items-center h-36px px-12px hover:bg-primary_active"
                     >
                         <Icon icon="mdi-drag" class="mr-8px text-20px cursor-move" />
-                        <n-checkbox v-model:checked="element.checked">
+                        <n-checkbox v-model:checked="element.hideInTable">
                             {{ element.title }}
                         </n-checkbox>
                     </div>
@@ -60,15 +60,15 @@ type List = Column & { checked?: boolean }
 const list = ref(initList());
 
 function initList(): List[] {
-    return columns.map((item) => ({ ...item, checked: true }))
+    return columns.map((item) => ({ ...item, hideInTable: !item.hideInTable }))
 }
 
 watch(list, (newValue: List[]) => {
-    const newColumns = newValue.filter(item => item.checked)
+    const newColumns = newValue.filter(item => item.hideInTable)
 
     const columns: Column[] = newColumns.map((item) => {
         const column = { ...item };
-        delete column.checked;
+        delete column.hideInTable;
         return column;
     }) as Column[];
 

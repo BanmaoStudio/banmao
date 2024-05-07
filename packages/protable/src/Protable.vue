@@ -70,11 +70,12 @@
     </n-card>
     <n-card class="flex-auto mt-12px shadow-sm">
         <template #header>
-            <slot v-if="$slots.tableHeader" name="table-header"></slot>
+            <slot v-if="$slots.tableHeader" name="tableHeader"></slot>
             <template v-else>{{ pageTitle }}</template>
         </template>
         <template #header-extra>
             <n-space>
+                <slot name="tableHeaderExtra"></slot>
                 <create-button
                     v-if="showCreate !== false"
                     @click="handleCreate" />
@@ -83,31 +84,32 @@
                         @click="() => loadData(1)"
                         :loading="loading" />
                     <density-button @update:select="handleSelectForTableSize" />
-                    <column-setting
-                        v-model:columns="columnSettingOptions"
+                    <column-setting-component
+                        v-if="columnSetting === false"
+                        v-model:columns="columnData"
                         secondary />
                 </n-button-group>
             </n-space>
         </template>
         <n-data-table
-            remote
-            :columns="tableColumns"
+            v-bind="$attrs"
+            :loading
+            :columns="columnData"
             :data="dataSource"
-            :pagination="paginationData"
-            :loading="loading"
-            :row-key="rowKey"
-            :scroll-x="1000"
-            :size="size"
-            @update:page="handlePageChange"
-            @update:page-size="handlePageSizeChange"
-            @update:checked-row-keys="handleCheck"
-            :bordered="false"
-            :flex-height="flexHeight !== false" />
+            :pagination
+            :size
+        />
     </n-card>
 </template>
 
 <script setup lang="ts">
-    import { computed, ref, onMounted, watchEffect, shallowRef } from 'vue'
+    import {
+        computed,
+        ref,
+        onMounted,
+        watchEffect,
+        shallowRef
+    } from 'vue'
     import {
         NButtonGroup,
         NCard,
@@ -124,44 +126,39 @@
     } from 'naive-ui'
     import { ProtableProps, ProtableEmits, ProtableColumn } from './Protable'
     import { CreateButton, RefreshButton, DensityButton } from './components'
-    import ColumnSetting from './components/ColumnSetting.vue'
+    import ColumnSettingComponent from './components/ColumnSetting.vue'
     import { useShowSuffix } from './hooks/useShowSuffix'
-    import { getDefaultPagination } from './utils/pagination'
     import { Icon } from '@iconify/vue'
 
     // 定义props
     const {
         columns,
-        pageTitle,
         loading,
+        pageTitle,
         dataSource,
-        rowKey,
         pagination,
         showCreate,
-    } = withDefaults(defineProps<ProtableProps>(), {
-        flexHeight: false,
-    })
-
-    const paginationData = getDefaultPagination(pagination as any)
+        columnSetting,
+    } = defineProps<ProtableProps>()
 
     // 定义emits
     const emit = defineEmits<ProtableEmits>()
 
-    const columnSettingOptions = ref()
+    const columnData = ref()
 
     watchEffect(() => {
-        columnSettingOptions.value = columns
+        columnData.value = columns
     })
 
-    const tableColumns = computed(() => {
-        return columnSettingOptions.value.filter(
-            (column: ProtableColumn<any>) => !column?.hideInTable
-        )
-    })
+    // const tableColumns = computed(() => {
+    //     return columnSettingOptions.value.filter(
+    //         (column: ProtableColumn<any>) => !column?.hideInTable
+    //     )
+    // })
 
     const searchFieldColumns = computed(() => {
-        return columnSettingOptions.value.filter(
-            (column: any) =>
+        return columns.filter(
+            (column: ProtableColumn<any>) =>
                 !column?.hideInSearch &&
                 column?.type !== 'selection' &&
                 column.key !== 'action' &&
@@ -233,27 +230,6 @@
         loadData(1)
     }
 
-    const handlePageSizeChange = (pageSize: number) => {
-        emit('update:pageSize', pageSize)
-    }
-
-    const handlePageChange = (page: number) => {
-        emit('update:page', page)
-    }
-
-    const handleCheck = (
-        keys: (string | number)[],
-        rows: object[],
-        meta: any
-    ) => {
-        emit('update:checked', keys, rows, meta)
-    }
 </script>
 
-<style scoped>
-    .card {
-        flex: 1;
-        margin-top: 12px;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    }
-</style>
+<style scoped></style>

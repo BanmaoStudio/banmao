@@ -11,17 +11,20 @@
         name: string
         age: number
         gender: string
-        date: string,
-        address: string,
+        date: string
+        address: string
         id: number
+        children?: RowData[]
     }
 
     const columns = ref<ProtableColumns<RowData>>([
-        { type: 'selection' },
+        { type: 'selection', fixed: 'left', width: 40 },
         {
             title: 'Name',
             key: 'name',
             valueType: 'text',
+            fixed: 'left',
+            width: 120,
             resizable: true,
             // render(row: RowData) {
             //     return <b>{ row.name }</b>
@@ -31,8 +34,8 @@
             title: 'Gender',
             valueType: 'select',
             key: 'gender',
+            width: 100,
             resizable: true,
-            sorter: 'default',
             filterOptions: [
                 { label: '男', value: 'male' },
                 { label: '女', value: 'female' },
@@ -56,22 +59,23 @@
         {
             title: 'Age',
             key: 'age',
-            sortOrder: 'descend',
-            sorter(a: RowData, b: RowData) {
-                return a.age - b.age
-            },
+            width: 100,
+            sorter: (a: RowData, b: RowData) => a.age - b.age,
             hideInSearch: true,
             resizable: true,
         },
         {
             title: 'Address',
             key: 'address',
+            width: 400,
+            ellipsis: true,
             hideInSearch: true,
             resizable: true,
         },
         {
             title: 'Date',
             key: 'date',
+            width: 160,
             valueType: 'date',
             resizable: true,
         },
@@ -79,6 +83,7 @@
             title: 'Action',
             key: 'action',
             width: 150,
+            hideInTable: true,
             resizable: true,
             fixed: 'right',
         }
@@ -96,66 +101,73 @@
     const dataSource = ref<RowData[]>([
         { id: 1, name: 'One', age: 10, gender: 'male', date: '2023-01-01', address: 'Address 1' },
         { id: 2, name: 'Two', age: 20, gender: 'female', date: '2023-01-02', address: 'Address 2' },
-        { id: 3, name: 'Three', age: 30, gender: 'female', date: '2023-01-03', address: 'Address 3' },
+        { id: 3, name: 'Three', age: 16, gender: 'female', date: '2023-01-03', address: 'Address 3', children: [
+            { id: 31, name: 'Three-One', age: 10, gender: 'male', date: '2023-01-01', address: 'Address 1' },
+        ] },
     ])
 
-    const rowKey = (row: any) => row.id
+    const rowKey = (row: RowData) => row.id
 
     const loading = ref(false)
 
-    const loadData = () => {
+    const loadData = (page: number) => {
         loading.value = true
         setTimeout(() => {
             loading.value = false
+            console.log('%cexample/src/App.vue:110 page', 'color: #007acc;', page);
         }, 1000)
     }
 
     onMounted(() => {
-        loadData()
+        loadData(1)
     })
 
     const handleCreate = () => {
         console.log('%cexample/src/App.vue:106 handleCreate', 'color: #007acc;')
     }
 
-    const handleSorterChange = (sorter: any) => {
-        console.log('%cexample/src/App.vue:118 sorter', 'color: #007acc;', sorter);
-        // columns.value.forEach((column) => {
-        //     if (column.sortOrder === undefined) return
-        //     if (!sorter) {
-        //         column.sortOrder = false
-        //         return
-        //     }
-        //     if (column.key === sorter.columnKey) column.sortOrder = sorter.order
-        //     else column.sortOrder = false
-        // })
+    const handleCheckedRowKeysChange = (keys: any) => {
+        console.log('%cexample/src/App.vue:127 keys', 'color: #007acc;', keys);
     }
+
+    const handlePageChange = (page: number) => {
+        pagination.value = {
+            ...pagination.value,
+            page
+        }
+        loadData(page)
+    }
+
+    const handlePageSizeChange = (pageSize: number) => {
+        pagination.value = {
+            ...pagination.value,
+            pageSize
+        }
+        loadData(1)
+    }
+
 </script>
 
 <template>
-    <!-- <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div> -->
-    <!-- <HelloWorld msg="Vite + Vue" /> -->
+    <div class="w-1000px">
     <Protable
+        remote
+        :scroll-x="600"
         pageTitle="Table"
         :rowKey="rowKey"
         :dataSource="dataSource"
         :columns="columns"
         :loading="loading"
         :pagination="pagination"
-        @update:pageSize="(e) => (pagination.pageSize = e)"
-        @update:page="(e) => (pagination.page = e)"
-        @update:sorter="handleSorterChange"
+        @update:pageSize="handlePageSizeChange"
+        @update:page="handlePageChange"
+        @update:checked-row-keys="handleCheckedRowKeysChange"
         @loadData="loadData"
         @create="handleCreate"
-    >
-    </Protable>
+    />
+
+    </div>
+
 </template>
 
 <style scoped>

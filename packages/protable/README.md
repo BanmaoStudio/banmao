@@ -91,6 +91,10 @@ onMounted(() => {
 
 参考 [naive-ui DataTable 组件](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)
 
+| 名称 | 类型 | 默认值 | 说明 | 版本 |
+| --- | --- | --- | --- | --- |
+| columnSetting | `boolean` | `false` | 是否显示列设置按钮 | 0.0.9 |
+
 ### ProtableColumn Props
 
 参考 [naive-ui DataTable 组件](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)
@@ -106,4 +110,13 @@ onMounted(() => {
 <!-- | hideInDescriptions | `boolean` | false | 是否在描述中隐藏 | 开发中 | -->
 <!-- | hideInDetails | `boolean` | false | 是否在详情中隐藏 | 开发中 | -->
 <!-- | hideInModal | `boolean` | false | 是否在弹窗中隐藏 | 开发中 | -->
+
+### Protable Slots
+
+参考 [naive-ui DataTable 组件](https://www.naiveui.com/zh-CN/os-theme/components/data-table#DataTable-Props)
+
+| 名称 | 参数 | 说明 | 版本 |
+| --- | --- | --- | --- |
+| tableHeader | - | 表格头部 |  |
+| tableHeaderExtra | - | 表格头部额外内容 |  |
 
