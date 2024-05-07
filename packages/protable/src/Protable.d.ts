@@ -60,6 +60,8 @@ export interface ProtableProps {
     showCreate?: boolean;
     /** 显示表格列自定义设置，默认隐藏 */
     columnSetting?: boolean;
+    defaultSearchValue?: any;
+    defaultFormValue?: any;
 }
 
 export interface ProtableEmits {

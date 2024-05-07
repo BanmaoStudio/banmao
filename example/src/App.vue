@@ -2,8 +2,9 @@
     // import HelloWorld from './components/HelloWorld.vue'
     import Protable from '@banmao/protable'
     import type { ProtableColumns } from '@banmao/protable'
+    import { NText } from 'naive-ui'
 
-    import { PaginationProps } from 'naive-ui'
+    import type { PaginationProps } from 'naive-ui'
 
     import { Ref, onMounted, ref } from 'vue'
 
@@ -17,6 +18,33 @@
         children?: RowData[]
     }
 
+    const dataSource = ref<RowData[]>([
+        {
+            id: 1,
+            name: 'One',
+            age: 10,
+            gender: 'male',
+            date: '2023-01-01',
+            address: 'Address 1',
+        },
+        {
+            id: 2,
+            name: 'Two',
+            age: 20,
+            gender: 'female',
+            date: '2023-01-02',
+            address: 'Address 2',
+        },
+        {
+            id: 3,
+            name: 'Three',
+            age: 16,
+            gender: 'female',
+            date: '2023-01-03',
+            address: '',
+        },
+    ])
+
     const columns = ref<ProtableColumns<RowData>>([
         { type: 'selection', fixed: 'left', width: 40 },
         {
@@ -26,9 +54,6 @@
             fixed: 'left',
             width: 120,
             resizable: true,
-            // render(row: RowData) {
-            //     return <b>{ row.name }</b>
-            // },
         },
         {
             title: 'Gender',
@@ -36,13 +61,18 @@
             key: 'gender',
             width: 100,
             resizable: true,
+            hideInSearch: true,
             filterOptions: [
                 { label: '男', value: 'male' },
                 { label: '女', value: 'female' },
                 { label: '未知', value: 'unknown' },
             ],
             filter(value: string, row: RowData) {
-                console.log('%cexample/src/App.vue:39 value', 'color: #007acc;', value);
+                console.log(
+                    '%cexample/src/App.vue:39 value',
+                    'color: #007acc;',
+                    value
+                )
                 return row.gender === value
             },
             render(row: RowData) {
@@ -86,7 +116,10 @@
             hideInTable: true,
             resizable: true,
             fixed: 'right',
-        }
+            render(_: RowData) {
+                return <span>操作</span>
+            },
+        },
     ])
 
     const pagination = ref({
@@ -98,14 +131,6 @@
         showQuickJumper: true,
     }) as Ref<PaginationProps>
 
-    const dataSource = ref<RowData[]>([
-        { id: 1, name: 'One', age: 10, gender: 'male', date: '2023-01-01', address: 'Address 1' },
-        { id: 2, name: 'Two', age: 20, gender: 'female', date: '2023-01-02', address: 'Address 2' },
-        { id: 3, name: 'Three', age: 16, gender: 'female', date: '2023-01-03', address: 'Address 3', children: [
-            { id: 31, name: 'Three-One', age: 10, gender: 'male', date: '2023-01-01', address: 'Address 1' },
-        ] },
-    ])
-
     const rowKey = (row: RowData) => row.id
 
     const loading = ref(false)
@@ -114,7 +139,11 @@
         loading.value = true
         setTimeout(() => {
             loading.value = false
-            console.log('%cexample/src/App.vue:110 page', 'color: #007acc;', page);
+            console.log(
+                '%cexample/src/App.vue:110 page',
+                'color: #007acc;',
+                page
+            )
         }, 1000)
     }
 
@@ -127,13 +156,13 @@
     }
 
     const handleCheckedRowKeysChange = (keys: any) => {
-        console.log('%cexample/src/App.vue:127 keys', 'color: #007acc;', keys);
+        console.log('%cexample/src/App.vue:127 keys', 'color: #007acc;', keys)
     }
 
     const handlePageChange = (page: number) => {
         pagination.value = {
             ...pagination.value,
-            page
+            page,
         }
         loadData(page)
     }
@@ -141,33 +170,43 @@
     const handlePageSizeChange = (pageSize: number) => {
         pagination.value = {
             ...pagination.value,
-            pageSize
+            pageSize,
         }
         loadData(1)
     }
 
+    const defaultSearchValue = {
+        gender: 'male',
+        date: new Date().getTime(),
+    }
+
+    function renderCell(v: string | number) {
+        if (!v) {
+            return <NText depth={3}> - </NText>
+        }
+        return v
+    }
 </script>
 
 <template>
     <div class="w-1000px">
-    <Protable
-        remote
-        :scroll-x="600"
-        pageTitle="Table"
-        :rowKey="rowKey"
-        :dataSource="dataSource"
-        :columns="columns"
-        :loading="loading"
-        :pagination="pagination"
-        @update:pageSize="handlePageSizeChange"
-        @update:page="handlePageChange"
-        @update:checked-row-keys="handleCheckedRowKeysChange"
-        @loadData="loadData"
-        @create="handleCreate"
-    />
-
+        <Protable
+            remote
+            :defaultSearchValue
+            :scroll-x="600"
+            pageTitle="Table"
+            :rowKey="rowKey"
+            :dataSource="dataSource"
+            :columns="columns"
+            :loading="loading"
+            :pagination="pagination"
+            @update:pageSize="handlePageSizeChange"
+            @update:page="handlePageChange"
+            @update:checked-row-keys="handleCheckedRowKeysChange"
+            @loadData="loadData"
+            @create="handleCreate"
+            :render-cell="renderCell" />
     </div>
-
 </template>
 
 <style scoped>
