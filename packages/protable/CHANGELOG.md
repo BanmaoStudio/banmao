@@ -1,5 +1,11 @@
 # @banmao/protable
 
+## 0.0.12
+
+### Patch Changes
+
+- 修复搜索栏折叠按钮显示问题
+
 ## 0.0.11
 
 ### Patch Changes
