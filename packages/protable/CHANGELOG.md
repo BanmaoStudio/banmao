@@ -1,5 +1,12 @@
 # @banmao/protable
 
+## 0.0.11
+
+### Patch Changes
+
+- 1. 新增 search-form Component.
+  2. 支持传入默认搜索条件
+
 ## 0.0.10
 
 ### Patch Changes
