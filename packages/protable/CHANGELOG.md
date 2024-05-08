@@ -1,5 +1,12 @@
 # @banmao/protable
 
+## 0.1.0
+
+### Minor Changes
+
+- - feat(component): :tada: add ClipboardCopy Component
+  - feat(tableColumn): 支持 copyable 属性,提供内置可复制属性
+
 ## 0.0.12
 
 ### Patch Changes
