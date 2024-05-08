@@ -99,6 +99,7 @@
             width: 400,
             ellipsis: true,
             hideInSearch: true,
+            copyable: true,
             resizable: true,
         },
         {
@@ -115,7 +116,7 @@
             hideInTable: true,
             resizable: true,
             fixed: 'right',
-            render(_: RowData) {
+            render() {
                 return <span>操作</span>
             },
         },

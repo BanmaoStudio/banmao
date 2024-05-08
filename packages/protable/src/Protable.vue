@@ -1,12 +1,11 @@
 <template>
     <div>
-        <search-form 
+        <search-form
             ref="searchFormRef"
             :columns="searchFieldColumns"
             :defaultValue="defaultSearchValue"
             @search="handleSearch"
-            @reset="handleReset"
-        />
+            @reset="handleReset" />
         <n-card class="flex-auto mt-12px shadow-sm">
             <template #header>
                 <slot v-if="$slots.tableHeader" name="tableHeader"></slot>
@@ -42,7 +41,7 @@
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
     import { computed, ref, watchEffect } from 'vue'
     import {
         NButtonGroup,
@@ -54,6 +53,7 @@
     import { CreateButton, RefreshButton, DensityButton } from './components'
     import ColumnSettingComponent from './components/ColumnSetting.vue'
     import SearchForm from './components/search-form/index.vue'
+    import ClipboardCopy from './components/ClipboardCopy.vue'
 
     // 定义props
     const {
@@ -73,7 +73,41 @@
     const columnData = ref()
 
     watchEffect(() => {
-        columnData.value = columns
+        columnData.value = columns.map((column: ProtableColumn<any>) => {
+            if (column && column.copyable) {
+                return {
+                    ...column,
+                    render: (row: any) => {
+                        const copyText = row[column.key]
+                        if (!copyText) return ''
+                        if (typeof copyText === 'string') {
+                            return (
+                                <ClipboardCopy text={copyText} />
+                            )
+                        }
+                        if (typeof copyText === 'object') {
+                            return (
+                                <ClipboardCopy text={JSON.stringify(copyText)} />
+                            )
+                        }
+                        if (typeof copyText === 'function') {
+                            return (
+                                <ClipboardCopy text={copyText()} />
+                            )
+                        }
+                        if (typeof copyText === 'number') {
+                            return (
+                                <ClipboardCopy text={copyText.toString()} />
+                            )
+                        }
+                        return ''
+                    }
+                }
+            } else {
+                return column
+            }
+
+        })
     })
 
     const searchFieldColumns = computed(() => {

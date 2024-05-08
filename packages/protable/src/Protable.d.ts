@@ -17,6 +17,7 @@ export type ProtableColumn<T> = {
     hideInSearch?: boolean;
     hideInForm?: boolean;
     hideInTable?: boolean;
+    copyable?: boolean;
 } & TableColumn<T>;
 
 export type ProtableColumns<T> = Array<ProtableColumn<T>>;
