@@ -3,6 +3,7 @@ module.exports = {
         "browser": true,
         "es2021": true
     },
+    "parser": "vue-eslint-parser",
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -24,7 +25,10 @@ module.exports = {
     "parserOptions": {
         "ecmaVersion": "latest",
         "parser": "@typescript-eslint/parser",
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
     },
     "plugins": [
         "@typescript-eslint",
