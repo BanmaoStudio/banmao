@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="tsx">
-    import { computed, ref, watchEffect } from 'vue'
+    import { computed, ref, watchEffect, h } from 'vue'
     import {
         NButtonGroup,
         NCard,
@@ -79,28 +79,30 @@
                     ...column,
                     render: (row: any) => {
                         const copyText = row[column.key]
+                        let text = ''
                         if (!copyText) return ''
-                        if (typeof copyText === 'string') {
-                            return (
-                                <ClipboardCopy text={copyText} />
-                            )
+
+                        switch (typeof copyText) {
+                            case 'string':
+                                text = copyText
+                                break;
+                            case 'object':
+                                text = JSON.stringify(copyText)
+                                break;
+                            case 'number':
+                                text = copyText.toString()
+                                break;
+                            default:
+                                text = ''
+                                break;
                         }
-                        if (typeof copyText === 'object') {
-                            return (
-                                <ClipboardCopy text={JSON.stringify(copyText)} />
+
+                        return h(
+                                ClipboardCopy,
+                                {
+                                    text
+                                }
                             )
-                        }
-                        if (typeof copyText === 'function') {
-                            return (
-                                <ClipboardCopy text={copyText()} />
-                            )
-                        }
-                        if (typeof copyText === 'number') {
-                            return (
-                                <ClipboardCopy text={copyText.toString()} />
-                            )
-                        }
-                        return ''
                     }
                 }
             } else {
