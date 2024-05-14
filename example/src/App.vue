@@ -45,6 +45,20 @@
         },
     ])
 
+    const fetchSelectOptions = () => {
+        let arr: any = [];
+
+        setTimeout(() => {
+            arr = [
+                { label: 'Option 1', value: '1' },
+                { label: 'Option 2', value: '2' },
+                { label: 'Option 3', value: '3' },
+            ]
+        }, 3000)
+
+        return arr
+    }
+
     const columns = ref<ProtableColumns<RowData>>([
         { type: 'selection', fixed: 'left', width: 40 },
         {
@@ -61,7 +75,12 @@
             key: 'gender',
             width: 100,
             resizable: true,
-            hideInSearch: true,
+            // hideInSearch: true,
+            searchConfig: {
+                remote: true,
+                filterable: true,
+                onSearch: fetchSelectOptions
+            },
             filterOptions: [
                 { label: '男', value: 'male' },
                 { label: '女', value: 'female' },
@@ -107,6 +126,9 @@
             key: 'date',
             width: 160,
             valueType: 'date',
+            searchConfig: {
+                dateType: 'datetimerange'
+            },
             resizable: true,
         },
         {
@@ -177,7 +199,7 @@
 
     const defaultSearchValue = {
         gender: 'male',
-        date: new Date().getTime(),
+        date: [new Date().getTime(), new Date().getTime()]
     }
 
     function renderCell(v: string | number) {
@@ -192,7 +214,6 @@
     <div class="w-1000px">
         <Protable
             remote
-            :defaultSearchValue
             :scroll-x="600"
             pageTitle="Table"
             :rowKey="rowKey"
@@ -205,7 +226,12 @@
             @update:checked-row-keys="handleCheckedRowKeysChange"
             @loadData="loadData"
             @create="handleCreate"
-            :render-cell="renderCell" />
+            :render-cell="renderCell"
+            :search-config="{
+                gridCols: 2,
+                defaultValue: defaultSearchValue,
+            }"
+        />
     </div>
 </template>
 

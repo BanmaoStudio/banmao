@@ -3,7 +3,7 @@
         <search-form
             ref="searchFormRef"
             :columns="searchFieldColumns"
-            :defaultValue="defaultSearchValue"
+            v-bind="searchConfig"
             @search="handleSearch"
             @reset="handleReset" />
         <n-card class="flex-auto mt-12px shadow-sm">
@@ -64,7 +64,7 @@
         pagination,
         showCreate,
         columnSetting,
-        defaultSearchValue
+        searchConfig
     } = defineProps<ProtableProps>()
 
     // 定义emits

@@ -23,11 +23,12 @@
                         v-model:value="searchFormData[item.key]"
                         :options="item.filterOptions"
                         :placeholder="`选择${item.title}`"
+                        v-bind="item?.searchConfig"
                         clearable />
                     <n-date-picker
                         v-else-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
-                        type="date"
+                        :type="item.searchConfig.dateType || 'date'"
                         style="width: 100%"
                         :placeholder="`选择${item.title}`"
                         clearable
@@ -84,27 +85,31 @@
         NButton,
     } from 'naive-ui'
     import { Icon } from '@iconify/vue'
-    import { onMounted, ref, shallowRef } from 'vue'
+    import { onMounted, ref, shallowRef, withDefaults } from 'vue'
     import { useShowSuffix } from '../../hooks/useShowSuffix'
     import { ProtableColumns } from '../../Protable.d'
 
     interface SearchFormProps {
         columns: ProtableColumns<any>
         readonly defaultValue?: any
+        // 搜索栏显示列数
+        gridCols: number
     }
 
-    const { columns, defaultValue } = defineProps<SearchFormProps>()
+    const { columns, defaultValue, gridCols } = withDefaults(defineProps<SearchFormProps>(), {
+        gridCols: 3
+    })
 
     const gridRef = shallowRef()
 
     // 搜索栏显示列数
-    const gridCols = ref(3)
+    // const gridCols = ref(3)
     // 默认折叠
     const gridCollapsed = ref(true)
     // 默认折叠后的行数
     const gridCollapsedRows = ref(1)
     // 显示隐藏的节点
-    const { showSuffix } = useShowSuffix(gridRef, gridCols.value)
+    const { showSuffix } = useShowSuffix(gridRef, gridCols)
 
     // 切换折叠
     const handleToggleCollapsed = () => {

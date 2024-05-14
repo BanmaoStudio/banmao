@@ -37,12 +37,13 @@ export interface ProtableInstance<T> {
 }
 
 export interface SearchConfig {
-    formItems: any[];
-    formRules: any[];
-    formModel: any;
-    labelWidth: string | 'auto';
-    labelAlign: 'left' | 'right';
-    labelPlacement: 'left' | 'right' | 'top' | 'bottom';
+    gridCols?: number;
+    defaultValue?: any;
+    formRules?: any[];
+    formModel?: any;
+    labelWidth?: string | 'auto';
+    labelAlign?: 'left' | 'right';
+    labelPlacement?: 'left' | 'right' | 'top' | 'bottom';
     size?: 'small' | 'medium' | 'large';
     showAdvancedButton?: boolean;
     showResetButton?: boolean;
@@ -61,7 +62,6 @@ export interface ProtableProps {
     showCreate?: boolean;
     /** 显示表格列自定义设置，默认隐藏 */
     columnSetting?: boolean;
-    defaultSearchValue?: any;
     defaultFormValue?: any;
 }
 
