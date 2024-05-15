@@ -3,7 +3,9 @@
         <template #trigger>
             <n-button size="small" type="warning" :secondary="secondary !== false">
                 <Icon icon="ant-design:setting-outlined" class="mr-4px text-16px" />
-                表格列设置
+                <span v-if="label">
+                    {{ label }}
+                </span>
             </n-button>
         </template>
         <div class="w-210px">
@@ -43,11 +45,14 @@ defineOptions({
 interface Props {
     columns: Column[];
     secondary?: boolean;
+    label?: string;
 }
 
 type Column = ProtableColumn<any>
 
-const { secondary, columns } = defineProps<Props>();
+const { secondary, columns } = withDefaults(defineProps<Props>(), {
+    label: '表格列设置'
+})
 
 interface Emits {
     (event: 'update:columns', value: Column[]): void;
