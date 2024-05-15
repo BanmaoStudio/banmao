@@ -87,7 +87,7 @@
     import { Icon } from '@iconify/vue'
     import { onMounted, ref, shallowRef, withDefaults } from 'vue'
     import { useShowSuffix } from '../../hooks/useShowSuffix'
-    import { ProtableColumns } from '../../Protable.d'
+    import { ProtableColumns } from '@/types/Protable.d'
 
     interface SearchFormProps {
         columns: ProtableColumns<any>

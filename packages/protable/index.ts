@@ -6,4 +6,4 @@ Protable.install = (app: App) => {
 }
 
 export default Protable;
-export type { ProtableProps, ProtableColumns } from './src/Protable';
+export type { ProtableProps, ProtableColumns } from './src/types/Protable';

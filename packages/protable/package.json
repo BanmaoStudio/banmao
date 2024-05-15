@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "type": "module",
   "main": "index.ts",
-  "types": "index.d.ts",
+  "types": "src/types/Protable.d.ts",
   "publishConfig": {
     "access": "public"
   },

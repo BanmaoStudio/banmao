@@ -34,7 +34,7 @@ import { ref, watch } from 'vue'
 import VueDraggable from 'vuedraggable'
 import { NButton, NPopover, NCheckbox } from 'naive-ui'
 import { Icon } from '@iconify/vue'
-import { ProtableColumn } from '../Protable';
+import { ProtableColumn } from '@/types/Protable';
 
 defineOptions({
     name: 'ColumnSetting'

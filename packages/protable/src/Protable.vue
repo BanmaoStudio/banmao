@@ -49,7 +49,7 @@
         NSpace,
         NDataTable,
     } from 'naive-ui'
-    import { ProtableProps, ProtableEmits, ProtableColumn } from './Protable'
+    import { ProtableProps, ProtableEmits, ProtableColumn } from '@/types/Protable'
     import { CreateButton, RefreshButton, DensityButton } from './components'
     import ColumnSettingComponent from './components/ColumnSetting.vue'
     import SearchForm from './components/search-form/index.vue'
