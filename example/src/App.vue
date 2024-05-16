@@ -2,9 +2,9 @@
     // import HelloWorld from './components/HelloWorld.vue'
     import Protable from '@banmao/protable'
     import type { ProtableColumns } from '@banmao/protable'
-    import { NText } from 'naive-ui'
+    import { NText, NButton, NSpace } from 'naive-ui'
 
-    import type { PaginationProps } from 'naive-ui'
+    import type { PaginationProps, SelectOption } from 'naive-ui'
 
     import { Ref, onMounted, ref } from 'vue'
 
@@ -46,15 +46,42 @@
     ])
 
     const fetchSelectOptions = () => {
-        let arr: any = [];
+        let arr: SelectOption[] = []
 
-        setTimeout(() => {
-            arr = [
-                { label: 'Option 1', value: '1' },
-                { label: 'Option 2', value: '2' },
-                { label: 'Option 3', value: '3' },
-            ]
-        }, 3000)
+        return new Promise((res) => {
+            setTimeout(() => {
+                arr = [
+                    { label: '全部', value: '' },
+                    { label: '男', value: 'male' },
+                    { label: '女', value: 'female' },
+                    { label: '未知', value: 'unknown' },
+                ]
+                res(arr)
+            }, 500)
+        })
+    }
+
+    const fetchSelectOptions1 = async () => {
+        let arr: SelectOption[] = []
+
+        // setTimeout(() => {
+        arr = [
+            {
+                value: '1',
+                label: 'Option 1',
+                children: [
+                    {
+                        value: '1-1',
+                        label: 'Option 1-1',
+                    },
+                    {
+                        value: '1-2',
+                        label: 'Option 1-2',
+                    },
+                ],
+            },
+        ]
+        // }, 3000)
 
         return arr
     }
@@ -62,12 +89,20 @@
     const columns = ref<ProtableColumns<RowData>>([
         { type: 'selection', fixed: 'left', width: 40 },
         {
+            title: '分类',
+            key: 'class',
+            hideInTable: true,
+            valueType: 'cascader',
+            request: fetchSelectOptions1,
+        },
+        {
             title: 'Name',
             key: 'name',
             valueType: 'text',
             fixed: 'left',
             width: 120,
             resizable: true,
+            tooltip: '标题过长会自动收缩',
         },
         {
             title: 'Gender',
@@ -79,19 +114,20 @@
             searchConfig: {
                 remote: true,
                 filterable: true,
-                onSearch: fetchSelectOptions
             },
+            // options: [
+            //     { label: '全部', value: '' },
+            //     { label: '男', value: 'male' },
+            //     { label: '女', value: 'female' },
+            //     { label: '未知', value: 'unknown' },
+            // ],
+            request: fetchSelectOptions,
             filterOptions: [
                 { label: '男', value: 'male' },
                 { label: '女', value: 'female' },
                 { label: '未知', value: 'unknown' },
             ],
             filter(value: string, row: RowData) {
-                console.log(
-                    '%cexample/src/App.vue:39 value',
-                    'color: #007acc;',
-                    value
-                )
                 return row.gender === value
             },
             render(row: RowData) {
@@ -108,6 +144,9 @@
         {
             title: 'Age',
             key: 'age',
+            valueType: 'digit',
+            min: 0,
+            max: 100,
             width: 100,
             sorter: (a: RowData, b: RowData) => a.age - b.age,
             resizable: true,
@@ -127,7 +166,7 @@
             width: 160,
             valueType: 'date',
             searchConfig: {
-                dateType: 'datetimerange'
+                type: 'datetimerange',
             },
             resizable: true,
         },
@@ -166,7 +205,8 @@
                 'color: #007acc;',
                 page
             )
-        }, 1000)
+            pagination.value.page = page
+        }, 300)
     }
 
     onMounted(() => {
@@ -177,8 +217,15 @@
         console.log('%cexample/src/App.vue:106 handleCreate', 'color: #007acc;')
     }
 
+    const checkedRowKeys = ref([])
+
     const handleCheckedRowKeysChange = (keys: any) => {
+        checkedRowKeys.value = keys
         console.log('%cexample/src/App.vue:127 keys', 'color: #007acc;', keys)
+    }
+
+    const handleCancelCheckedRow = () => {
+        checkedRowKeys.value = []
     }
 
     const handlePageChange = (page: number) => {
@@ -198,8 +245,8 @@
     }
 
     const defaultSearchValue = {
-        gender: 'male',
-        date: [new Date().getTime(), new Date().getTime()]
+        gender: '',
+        date: [new Date().getTime(), new Date().getTime()],
     }
 
     function renderCell(v: string | number) {
@@ -211,10 +258,10 @@
 </script>
 
 <template>
-    <div class="w-1000px">
+    <div class="w-full">
         <Protable
             remote
-            :scroll-x="600"
+            ref="tableRef"
             pageTitle="Table"
             :rowKey="rowKey"
             :dataSource="dataSource"
@@ -228,10 +275,29 @@
             @create="handleCreate"
             :render-cell="renderCell"
             :search-config="{
-                gridCols: 2,
+                gridCols: 3,
                 defaultValue: defaultSearchValue,
-            }"
-        />
+            }">
+            <template #select-bar v-if="checkedRowKeys.length > 0">
+                <div
+                    class="flex justify-between bg-gray-100 px-4 py-2 mb-4 rounded-[4px] hover:shadow-md">
+                    <n-space>
+                        <n-text>
+                            已选择
+                            <span class="text-red-500">{{
+                                checkedRowKeys.length
+                            }}</span>
+                            项
+                        </n-text>
+                        <n-button type="info" text @click="handleCancelCheckedRow">取消选择</n-button>
+                    </n-space>
+                    <n-space :gap="2">
+                        <n-button type="error" text>批量删除</n-button>
+                        <n-button type="primary" text>导出数据</n-button>
+                    </n-space>
+                </div>
+            </template>
+        </Protable>
     </div>
 </template>
 
