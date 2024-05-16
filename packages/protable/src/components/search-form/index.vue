@@ -18,13 +18,6 @@
                     :key="item.key"
                     :label="item.title"
                     :path="item.key">
-                    <n-select
-                        v-if="item.valueType === 'select'"
-                        v-model:value="searchFormData[item.key]"
-                        :options="item.filterOptions"
-                        :placeholder="`选择${item.title}`"
-                        v-bind="item?.searchConfig"
-                        clearable />
                     <template #label v-if="item.tooltip">
                         <div class="flex gap-2 items-center">
                             <span>{{ item.title }}</span>
@@ -38,18 +31,23 @@
                         </div>
                     </template>
                     <n-date-picker
-                        v-else-if="item.valueType === 'date'"
+                        v-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
-                        :type="item.searchConfig.dateType || 'date'"
+                        :type="item.valueType"
                         style="width: 100%"
                         :placeholder="`选择${item.title}`"
                         clearable
-                        value-format="yyyy-MM-dd" />
-                    <n-input
+                        value-format="yyyy-MM-dd"
+                        v-bind="item?.searchConfig" />
+                    <component
                         v-else
+                        :is="formFieldMaps[item.valueType]"
                         v-model:value="searchFormData[item.key]"
-                        clearable
-                        :placeholder="`输入${item.title}`" />
+                        :options="item.options || options[item.key]"
+                        :placeholder="`选择${item.title}`"
+                        :style="{ width: '100%' }"
+                        v-bind="item?.searchConfig" />
+                    <slot></slot>
                 </n-form-item-gi>
                 <n-gi suffix>
                     <n-space justify="end" :wrap="false">
@@ -86,6 +84,7 @@
 <script setup lang="ts">
     import {
         NCard,
+        NCascader,
         NForm,
         NGrid,
         NGi,
@@ -95,11 +94,36 @@
         NInput,
         NSpace,
         NButton,
+        NTooltip,
+        NAutoComplete,
+        NColorPicker,
+        NCheckbox,
+        NSwitch,
+        NDynamicTags,
+        NInputNumber,
+        NTimePicker,
+        NTreeSelect,
+SelectOption,
     } from 'naive-ui'
     import { Icon } from '@iconify/vue'
     import { onMounted, ref, shallowRef, withDefaults } from 'vue'
     import { useShowSuffix } from '../../hooks/useShowSuffix'
     import { ProtableColumns } from '@/types/Protable.d'
+
+    const formFieldMaps: Record<string, any> = {
+        text: NInput,
+        select: NSelect,
+        date: NDatePicker,
+        time: NTimePicker,
+        cascader: NCascader,
+        autoComplete: NAutoComplete,
+        colorPicker: NColorPicker,
+        checkbox: NCheckbox,
+        switch: NSwitch,
+        dynamicTags: NDynamicTags,
+        digit: NInputNumber,
+        treeSelect: NTreeSelect,
+    }
 
     interface SearchFormProps {
         columns: ProtableColumns<any>
