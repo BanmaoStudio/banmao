@@ -106,7 +106,7 @@
 SelectOption,
     } from 'naive-ui'
     import { Icon } from '@iconify/vue'
-    import { onMounted, ref, shallowRef, withDefaults } from 'vue'
+    import { onMounted, reactive, ref, shallowRef, watch, withDefaults } from 'vue'
     import { useShowSuffix } from '../../hooks/useShowSuffix'
     import { ProtableColumns } from '@/types/Protable.d'
 
@@ -159,6 +159,37 @@ SelectOption,
         (e: 'search', payload: any): void
         (e: 'reset'): void
     }>()
+
+    /** 搜索栏各select options */
+    const options = reactive<{ [key: string]: SelectOption[]}>({})
+    
+    // 获取远程服务器枚举
+    const getRemoteServerEnum = (fn: any, prop: string) => {
+        // 获取当前有选择表单的列的key值
+        const cOptsKey = columns.filter((item) => item.key === prop)[0]['key']
+
+        if (!fn) {
+            return []
+        }
+        if (!prop) {
+            return []
+        }
+
+        fn().then((res: any[]) => {
+            options[cOptsKey] = res;
+        })
+    }
+
+    watch(() => columns, (newVal) => {
+        newVal.forEach((item) => {
+            if (item.request) {
+                getRemoteServerEnum(item.request, item.key)
+            }
+        })
+    }, {
+        deep: true,
+        immediate: true,
+    })
 
     // 搜索表单数据
     const searchFormData = ref<{ [key: string]: any }>({})
