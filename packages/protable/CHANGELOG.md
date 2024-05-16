@@ -1,5 +1,15 @@
 # @banmao/protable
 
+## 0.2.0
+
+### Minor Changes
+
+- - style(protable): 修改展示细节
+  - feat: 新增 column.request, 支持表单选择器的异步数据请求
+  - feat: 查询表单支持 gridCols 属性
+  - feat: 查询表单支持 autocomponent,colorpicker,checkbox,switch,dynamicTags,inputNumber,timePicker,treeSelect
+  - feat: 新增 colum.tooltip 支持信息提示
+
 ## 0.1.1
 
 ### Patch Changes
