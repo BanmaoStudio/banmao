@@ -25,6 +25,18 @@
                         :placeholder="`选择${item.title}`"
                         v-bind="item?.searchConfig"
                         clearable />
+                    <template #label v-if="item.tooltip">
+                        <div class="flex gap-2 items-center">
+                            <span>{{ item.title }}</span>
+                            <n-tooltip trigger="hover">
+                                <template #trigger>
+                                    <Icon
+                                        icon="ant-design:question-circle-outlined" />
+                                </template>
+                                {{ item.tooltip }}
+                            </n-tooltip>
+                        </div>
+                    </template>
                     <n-date-picker
                         v-else-if="item.valueType === 'date'"
                         v-model:value="searchFormData[item.key]"
