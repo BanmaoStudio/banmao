@@ -1,0 +1,10 @@
+{
+  "name": "@banmao/datav",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "main": "index.ts",
+  "keywords": ["dataV", "vue"],
+  "author": "banmao",
+  "license": "MIT"
+}
