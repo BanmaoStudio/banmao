@@ -15,29 +15,37 @@
                 <n-space>
                     <slot name="tableHeaderExtra"></slot>
                     <create-button
-                        v-if="showCreate !== false"
+                        v-if="toolbarConfig?.createButton !== false"
+                        :label="toolbarConfig?.createButtonText"
                         @click="handleCreate" />
                     <n-button-group>
                         <refresh-button
+                            v-if="toolbarConfig?.reloadButton !== false"
+                            :label="toolbarConfig?.reloadButtonText"
                             @click="() => loadData(1)"
                             :loading="loading" />
                         <density-button
+                            v-if="toolbarConfig?.densityButton !== false"
                             @update:select="handleSelectForTableSize" />
                         <column-setting-component
-                            v-if="columnSetting === false"
+                            v-if="toolbarConfig?.columnSettingButton !== false"
                             v-model:columns="columnData"
+                            :label="toolbarConfig?.columnSettingButtonText"
                             secondary />
                     </n-button-group>
                 </n-space>
             </template>
+            <slot name="select-bar"></slot>
             <n-data-table
-                v-bind="$attrs"
                 :loading
                 :columns="columnData"
                 :data="dataSource"
                 :pagination
-                :size />
+                :size
+                v-bind="$attrs"
+            />
         </n-card>
+
     </div>
 </template>
 
@@ -62,9 +70,8 @@
         pageTitle,
         dataSource,
         pagination,
-        showCreate,
-        columnSetting,
-        searchConfig
+        searchConfig,
+        toolbarConfig
     } = defineProps<ProtableProps>()
 
     // 定义emits
