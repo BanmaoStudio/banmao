@@ -1,0 +1,14 @@
+{
+  "name": "@banmao/proform",
+  "version": "0.0.0",
+  "description": "",
+  "private": true,
+  "main": "libs/index.ts",
+  "types": "libs/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
