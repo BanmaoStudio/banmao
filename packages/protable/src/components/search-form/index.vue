@@ -132,9 +132,12 @@ SelectOption,
         gridCols: number
     }
 
-    const { columns, defaultValue, gridCols } = withDefaults(defineProps<SearchFormProps>(), {
-        gridCols: 3
-    })
+    const { columns, defaultValue, gridCols } = withDefaults(
+        defineProps<SearchFormProps>(),
+        {
+            gridCols: 3,
+        }
+    )
 
     const gridRef = shallowRef()
 
