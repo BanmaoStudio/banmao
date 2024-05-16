@@ -1,13 +1,12 @@
 <template>
-    <n-dropdown
-        @select="handleSelect"
-        trigger="click"
-        :options="options">
+    <n-dropdown @select="handleSelect" trigger="click" :options="options">
         <n-tooltip trigger="hover">
             <template #trigger>
                 <n-button size="small" quaternary>
                     <template #icon>
-                        <Icon icon="ant-design:column-height-outlined" class="text-18px" />
+                        <Icon
+                            icon="ant-design:column-height-outlined"
+                            class="text-18px" />
                     </template>
                 </n-button>
             </template>

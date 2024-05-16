@@ -2,7 +2,7 @@
     <n-card>
         <n-form
             label-placement="left"
-            label-width="100"
+            label-width="auto"
             :show-feedback="false"
             :show-require-mark="false">
             <n-grid
@@ -65,7 +65,9 @@
                         </n-button>
                         <n-button
                             v-if="showSuffix"
-                            @click="handleToggleCollapsed">
+                            @click="handleToggleCollapsed"
+                            text
+                            type="primary">
                             <template #icon>
                                 <Icon
                                     :icon="`mdi:chevron-${
